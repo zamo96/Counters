@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Окно входа";
+}
+@model Counters.Models.Login
+<html>
+<head>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    @using (Html.BeginForm("Logins", "Home", FormMethod.Post))
+    {
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" area-hidden="true">X</button>
+                <h4>Вход</h4>
+            </div>
+            <div class="modal-body">
+                <dl class="dl-horizontal">
+                    <dt>Логин</dt>
+                    <dd> @Html.EditorFor(m => m.login)</dd>
+                    <dt>Пароль</dt>
+                    <dd> @Html.EditorFor(m => m.pass)</dd>
+                    <dd><input style="text-align: left" type="submit" value="Войти" /></dd>
+                </dl>
+
+            </div>
+
+        </div>
+    }
+
+</body>
+</html>

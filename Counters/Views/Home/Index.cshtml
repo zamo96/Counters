@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@model List<List<Counters.Models.Filling>>
+<html>
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/xrange.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+</head>
+<body>
+    <div>
+        <h1>Наработка часов оборудования на @DateTime.Now.ToShortDateString()</h1>
+        <table class="table">
+            <tr>
+                <th>
+                    Линия
+                </th>
+                <th>
+                    Наработка часов
+                </th>
+                <th>
+                    Дата
+                </th>
+                <th></th>
+            </tr>
+            @{
+
+                for (int i = 0; i < Model.Count(); i++)
+                {
+
+                    <tr>
+                        <td>
+                            @Model[i].Last().Name
+                        </td>
+                        <td>
+                            @{
+                                Int32 buf;
+                                buf = Convert.ToInt32(Model[i].Last().Value.ToString());
+                                buf = buf / 60;
+                            }
+                            @buf
+                        </td>
+
+                        <td>
+                            @Model[i].Last().Date
+                        </td>
+
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+    @{
+        Int32 BossarHoursForDay = 0;
+        Int32 ArsilHoursForDay = 0;
+        Int32 CombiblockHoursForDay = 0;
+        Int32 CombifitHoursForDay = 0;
+        Int32 CvadroblockHoursForDay = 0;
+        Int32 KronesFmtHoursForDay = 0;
+        Int32 TBA11HoursForDay = 0;
+        Int32 TBA12HoursForDay = 0;
+        for (int i = 0; i < Model.Count(); i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    BossarHoursForDay = (Convert.ToInt32(Model[i].Last().Value.ToString()) - Convert.ToInt32(Model[i].First().Value.ToString())) / 60;
+                    break;
+                case 1:
+                    ArsilHoursForDay = (Convert.ToInt32(Model[i].Last().Value.ToString()) - Convert.ToInt32(Model[i].First().Value.ToString())) / 60;
+                    break;
+                case 3:
+                    CombiblockHoursForDay = (Convert.ToInt32(Model[i].Last().Value.ToString()) - Convert.ToInt32(Model[i].First().Value.ToString())) / 60;
+                    break;
+                case 4:
+                    CombifitHoursForDay = (Convert.ToInt32(Model[i].Last().Value.ToString()) - Convert.ToInt32(Model[i].First().Value.ToString())) / 60;
+                    break;
+                case 5:
+                    CvadroblockHoursForDay = (Convert.ToInt32(Model[i].Last().Value.ToString()) - Convert.ToInt32(Model[i].First().Value.ToString())) / 60;
+                    break;
+                case 6:
+                    KronesFmtHoursForDay = (Convert.ToInt32(Model[i].Last().Value.ToString()) - Convert.ToInt32(Model[i].First().Value.ToString())) / 60 ;
+                    break;
+                case 7:
+                    TBA11HoursForDay = (Convert.ToInt32(Model[i].Last().Value.ToString()) - Convert.ToInt32(Model[i].First().Value.ToString())) / 60 ;
+                    break;
+                case 8:
+                    TBA11HoursForDay = (Convert.ToInt32(Model[i].Last().Value.ToString()) - Convert.ToInt32(Model[i].First().Value.ToString())) / 60;
+                    break;
+                default:
+
+                    break;
+            }
+        }
+    }
+    <h1>Наработка часов оборудования за @DateTime.Now.ToShortDateString()</h1>
+    <div id="barchart">
+
+    </div>
+    <script>
+// Create the chart
+Highcharts.chart('barchart', {
+  chart: {
+    type: 'column'
+  },
+  title: {
+        text: ''
+  },
+  subtitle: {
+    text: ''
+  },
+  xAxis: {
+      type: 'category',
+      title: {
+          text: ''
+      }
+  },
+  yAxis: {
+    title: {
+      text: 'Кол-во часов'
+    }
+
+  },
+  legend: {
+    enabled: false
+  },
+  plotOptions: {
+    series: {
+      borderWidth: 0,
+      dataLabels: {
+        enabled: true,
+        format: '{point.y:.1f}'
+      }
+    }
+  },
+
+  tooltip: {
+    headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+    pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> of total<br />'
+  },
+
+  "series": [
+    {
+      "name": "Objects",
+      "colorByPoint": true,
+      "data": [
+        {
+          "name": "Боссар",
+          "y": @BossarHoursForDay
+        },
+        {
+          "name": "Арсил 1",
+          "y": @ArsilHoursForDay
+        },
+        {
+          "name": "Комбиблок",
+          "y": @CombiblockHoursForDay
+        },
+        {
+          "name": "Комбифит",
+          "y": @CombifitHoursForDay
+        },
+        {
+          "name": "Квадраблок",
+          "y": @CvadroblockHoursForDay
+
+        },
+        {
+          "name": "Кронес ФМТ",
+          "y": @KronesFmtHoursForDay
+        },
+        {
+          "name": "ТБА 11",
+          "y": @TBA11HoursForDay
+        },
+         {
+          "name": "ТБА 12",
+          "y": @TBA12HoursForDay
+        }
+      ]
+    }
+    ],
+    navigation: {
+        buttonOptions: {
+            enabled: false
+        }
+    }
+});
+    </script>
+
+</body>
+</html>
