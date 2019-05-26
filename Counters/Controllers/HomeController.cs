@@ -21,6 +21,7 @@ namespace Counters.Controllers
 
         public ActionResult Index(Login log)
         {
+            // Just check that it works
             if (log.login == "Илья" && log.pass == "123")
             {
                 DateTime CurrentDate = new DateTime(2018, 12, 10);
